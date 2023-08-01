@@ -1,5 +1,8 @@
 # CentralMeteorológica
-Central Meteorológica usando ILI9341 TFT 240x320 display. Mejorada de la versión original de https://github.com/ThingPulse/esp8266-weather-station-color.
+Central Meteorológica usando ILI9341 TFT 240x320 display. Mejorada de la versión original de:
+
+https://www.instructables.com/ESP8266-Weather-Widget-V20.
+https://github.com/ThingPulse/esp8266-weather-station-color.
 
 
 Mejoras aplicadas:
@@ -10,4 +13,4 @@ Mejoras aplicadas:
 
 
 
-Nota: Esta version no usa el Touch screen del display.
+Nota: Esta version no usa el Touch screen del display por ahora.
