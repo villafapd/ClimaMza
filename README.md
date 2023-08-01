@@ -14,6 +14,8 @@ Video del proyecto:
 https://clipchamp.com/watch/r059d5wqC3S
 
 
+![20230702_183445](https://github.com/villafapd/ClimaMza/assets/61601667/410870f0-d0a1-4108-839c-bad7ce437f45)
+
 
 
 Mejoras aplicadas:
