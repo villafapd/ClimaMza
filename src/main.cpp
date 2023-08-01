@@ -16,7 +16,7 @@
 #define ESP8266_CLOCK 80000000UL
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
-#define WEBSERVER_H //Siempre respetar este orden de ls librerias
+#define WEBSERVER_H //Siempre respetar este orden de ls librerias porque genera conflicto
 #include <ESPAsyncWebServer.h>
 #include <ESPAsyncTCP.h>
 #include <AsyncElegantOTA.h>
