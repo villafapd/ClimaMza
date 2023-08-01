@@ -8,6 +8,8 @@ https://www.instructables.com/ESP8266-Weather-Widget-V20.
 
 https://github.com/ThingPulse/esp8266-weather-station-color.
 
+Ante todo agradecer a los autores originales de este proyecto
+
 Foto del proyecto:
 ![20230719_214715](https://github.com/villafapd/ClimaMza/assets/61601667/b23426ba-06c6-40fd-b9dd-08b7271ce15c)
 
