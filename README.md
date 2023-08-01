@@ -30,4 +30,4 @@ Mejoras aplicadas:
 5) Todo el proyecto se realizó con PlatformIO
 
 
-Nota: Esta version no usa el Touch screen del display por ahora.
+Nota: Esta versión no usa el Touch screen del display por ahora.
