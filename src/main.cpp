@@ -25,6 +25,22 @@
 #include "TouchControllerWS.h"
 #include "SunMoonCalc.h"
 
+// Manejo de la terminal serie pero en UDP. Es necesario para depuerar el programa cuando se usa OTA
+#include <WiFiUdp.h>
+#include <Esp.h>
+//#include <Modbus.h>
+#include <ModbusIP_ESP8266.h>
+
+
+//ModbusIP object
+ModbusIP mb;
+WiFiUDP Udp;
+
+
+//Puerto y dirección IP del monitor remoto (Uso de UDP). En este caso es la raspberry PI4
+IPAddress DelRemoto(192, 168, 68, 99);
+int udpport = 15052;
+
 
 /***
    Instalar las siguientes librarias con Arduino Library Manager
@@ -96,6 +112,17 @@ int VelocInt=0;
 String NombreRed;
 String PresionAtmoString;
 float Visi=0;
+unsigned long previousMillis = 0;
+int CMD_01;
+
+uint16_t Read_MB_Reg[10];
+uint16_t Write_MB_Reg[10];
+int EstadoCooler= 0;
+bool EstadoServerModbus= false;
+String ServerModbus_Str;
+int ServerModbus_int = 0;
+long time_sampling;
+
 
 ILI9341_SPI tft = ILI9341_SPI(TFT_CS, TFT_DC);
 MiniGrafx gfx = MiniGrafx(&tft, BITS_PER_PIXEL, palette);
@@ -198,6 +225,28 @@ void initTime() {
   printf("Local time: %s", asctime(localtime(&now))); // print formated local time, same as ctime(&now)
   printf("UTC time:   %s", asctime(gmtime(&now)));    // print formated GMT/UTC time
 }
+
+// Función para Monitorear a través de UDP remoto con OTA
+void UDP_Serial_Println(String EntradaText)
+{
+  String str = EntradaText;
+  //Construct Char* from String    
+    str += "\n";
+    int n = str.length(); 
+    char text[n + 1];     
+    strcpy(text, str.c_str()); 
+
+  // String Texto = InputText;
+  if (WiFi.status() == WL_CONNECTED)
+    {
+      Udp.beginPacket(DelRemoto, udpport);
+      Udp.write(text);
+      Udp.endPacket();
+    }
+}
+
+
+
 
 void setup() 
 {
@@ -355,7 +404,9 @@ floar PresionAtm = 0;
         timerPress = millis();
         canBtnPress = true;
         }
-
+  mb.client();
+  time_sampling = millis();
+  UDP_Serial_Println("ModemFO: Cliente modbus activo en ESP8266");
 
 }
 
@@ -428,6 +479,45 @@ void loop()
     }
   } //!asleep
   }
+
+  mb.task(); 
+  delay(100);
+     if (millis() > time_sampling + 1600) 
+   {
+      time_sampling = millis();
+      EstadoServerModbus =mb.isConnected(DelRemoto);
+      if(EstadoServerModbus)
+      {
+        ServerModbus_Str = "Conectado";
+        ServerModbus_int = 1;
+      }
+      else
+      {
+        ServerModbus_Str = "Desconectado";
+        ServerModbus_int = 0;
+      }
+      if (mb.isConnected(DelRemoto)) 
+      {   // Check if connection to Modbus Slave is established
+        mb.readHreg(DelRemoto, 0, Read_MB_Reg, 10);  // Initiate Read Coil from Modbus Slave
+        mb.writeHreg(DelRemoto, 10, Write_MB_Reg, 10);
+        //Serial.println("Comando Ejecutado");
+      } 
+      else 
+      {
+        mb.connect(DelRemoto);           // Try to connect if no connection
+      }
+
+   }
+  /* 
+  Write_MB_Reg[0] = aht10.readTemperature()*100;
+  Write_MB_Reg[1] = aht10.readHumidity()*100;
+  Write_MB_Reg[2] = SetPoint_Hum_H;
+  Write_MB_Reg[3] = SetPoint_Hum_L;
+  Write_MB_Reg[4] = Conta_Retardo_Arr; //900 segundos
+  Write_MB_Reg[5] = TempoCount; //300 segundos
+  Write_MB_Reg[6] = digitalRead(NODE_PIN_D0);
+*/
+
 }
 
 
