@@ -37,7 +37,7 @@ const boolean HARD_SLEEP = false;         // true go into deepSleep false = turn
 // OpenWeatherMap Settings
 // Sign up here to get an API key: https://docs.thingpulse.com/how-tos/openweathermap-key/
 
-String OPEN_WEATHER_MAP_API_KEY = "Insertar API Key"; //La api key se obtiene desde openwather
+String OPEN_WEATHER_MAP_API_KEY = "API KEY"; //La api key se obtiene desde openwather
 /*
 Go to https://openweathermap.org/find?q= and search for a location. Go through the
 result set and select the entry closest to the actual location you want to display 
