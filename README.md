@@ -27,7 +27,10 @@ Mejoras aplicadas:
 2) Se le agregó OTA Elegant para pode actualizar el programa desde PC o Celular.
 3) Se realizó la traducción al Español
 4) Se redistribuyó la información en la pantalla principal ya que el touchscreen esta deshabilitado.
-5) Todo el proyecto se realizó con PlatformIO
+5) Se le agregó Modbus TCP/IP Cliente
+6) Todo el proyecto se realizó con PlatformIO
 
 
-Nota: Esta versión no usa el Touch screen del display por ahora.
+Nota: Esta versión no usa el Touch screen del display por ahora. 
+14/12/2023 - En proceso de habilitación del tocuh para comandos y lectura de estados modbus tcp.
+
