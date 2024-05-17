@@ -38,8 +38,8 @@ WiFiUDP Udp;
 
 
 //Puerto y dirección IP del monitor remoto (Uso de UDP). En este caso es la raspberry PI4
-IPAddress DelRemoto(192, 168, 68, 99);
-int udpport = 15052;
+IPAddress DelRemoto(192, 168, 68, 100);
+int udpport = 15105;
 
 
 /***
@@ -122,7 +122,7 @@ bool EstadoServerModbus= false;
 String ServerModbus_Str;
 int ServerModbus_int = 0;
 long time_sampling;
-
+int ContaRetrys = 0;
 
 ILI9341_SPI tft = ILI9341_SPI(TFT_CS, TFT_DC);
 MiniGrafx gfx = MiniGrafx(&tft, BITS_PER_PIXEL, palette);
