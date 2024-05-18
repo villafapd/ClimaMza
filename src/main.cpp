@@ -123,6 +123,9 @@ String ServerModbus_Str;
 int ServerModbus_int = 0;
 long time_sampling;
 int ContaRetrys = 0;
+int Conta_Poll = 0;
+unsigned long ts_Modbus = 0;
+unsigned long PollingModbus_interval = 2000;
 
 ILI9341_SPI tft = ILI9341_SPI(TFT_CS, TFT_DC);
 MiniGrafx gfx = MiniGrafx(&tft, BITS_PER_PIXEL, palette);
@@ -481,42 +484,33 @@ void loop()
   }
 
   mb.task(); 
-  delay(100);
-     if (millis() > time_sampling + 1600) 
+  if (millis() > (ts_Modbus + PollingModbus_interval)) 
    {
-      time_sampling = millis();
+      ts_Modbus = millis();
       EstadoServerModbus =mb.isConnected(DelRemoto);
-      if(EstadoServerModbus)
+      if((EstadoServerModbus) & (WiFi.waitForConnectResult() == 3))
       {
         ServerModbus_Str = "Conectado";
         ServerModbus_int = 1;
+        Conta_Poll = Conta_Poll + 1;
+        if (Conta_Poll == 1)
+        {
+          mb.readHreg(DelRemoto, 0, Read_MB_Reg, 10);  // Initiate Read Coil from Modbus Slave
+        }
+        else if (Conta_Poll == 2)
+        {
+          mb.writeHreg(DelRemoto, 10, Write_MB_Reg, 10);
+          Conta_Poll = 0;
+        }
+
       }
-      else
-      {
-        ServerModbus_Str = "Desconectado";
-        ServerModbus_int = 0;
-      }
-      if (mb.isConnected(DelRemoto)) 
-      {   // Check if connection to Modbus Slave is established
-        mb.readHreg(DelRemoto, 0, Read_MB_Reg, 10);  // Initiate Read Coil from Modbus Slave
-        mb.writeHreg(DelRemoto, 10, Write_MB_Reg, 10);
-        //Serial.println("Comando Ejecutado");
-      } 
       else 
       {
         mb.connect(DelRemoto);           // Try to connect if no connection
       }
 
    }
-  /* 
-  Write_MB_Reg[0] = aht10.readTemperature()*100;
-  Write_MB_Reg[1] = aht10.readHumidity()*100;
-  Write_MB_Reg[2] = SetPoint_Hum_H;
-  Write_MB_Reg[3] = SetPoint_Hum_L;
-  Write_MB_Reg[4] = Conta_Retardo_Arr; //900 segundos
-  Write_MB_Reg[5] = TempoCount; //300 segundos
-  Write_MB_Reg[6] = digitalRead(NODE_PIN_D0);
-*/
+
 
 }
 
